@@ -89,6 +89,40 @@ class Optimumrx(Resource):
        attribute16,attributevalue16,attribute17,attributevalue17,attribute18,attributevalue18))
        connection.commit()
 
+@app.route('/medication1/<prescriptionId>', methods=["POST"])
+def medication1(prescriptionId):
+    prescriptionHistoryId = str(uuid.uuid4().hex)
+
+    connection = pymysql.connect(host=config.CONFIG['host'], user=config.CONFIG['user'],
+                                passwd=config.CONFIG['passwd'], db=config.CONFIG['db'])
+
+    c = connection.cursor()
+    c.execute(
+    "SELECT * FROM prescription WHERE prescriptionId ='" + prescriptionId + "'")
+
+    data = c.fetchall()
+
+    for row in data:
+        print(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9],row[10],row[11],
+        row[12],row[13],row[14],row[15],row[16],row[17],row[18],row[19],row[20],row[21],
+        row[22],row[23],row[24],row[25],row[26],row[27],row[28],
+        row[29],row[30],row[31],row[32],row[33],row[34],row[35],row[36],row[37],row[38],
+        row[39],row[40],row[41],row[42],row[43],row[44])
+    c.close()
+    cl = connection.cursor()
+    cl.execute(
+    ''' INSERT INTO prescription_history(prescriptionHistoryId,prescriptionId,patientId,filename,patientName,timestamp,penName,patientemail,penId, 
+        doctorName,attribute1,attributevalue1,attribute2,attributevalue2,attribute3,attributevalue3,attribute4,attributevalue4,attribute5,attributevalue5,
+        attribute6,attributevalue6,attribute7,attributevalue7,attribute8,attributevalue8,attribute9,attributevalue9,attribute10,attributevalue10,
+        attribute11,attributevalue11,attribute12,attributevalue12,attribute13,attributevalue13,attribute14,attributevalue14,attribute15,attributevalue15,
+        attribute16,attributevalue16,attribute17,attributevalue17,attribute18,attributevalue18) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,
+        %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''',(prescriptionHistoryId,row[0],row[1],row[2],row[3],
+        row[4],row[5],row[6],row[7],row[8],row[9],row[10],row[11],
+        row[12],row[13],row[14],row[15],row[16],row[17],row[18],row[19],row[20],row[21],
+        row[22],row[23],row[24],row[25],row[26],row[27],row[28],
+        row[29],row[30],row[31],row[32],row[33],row[34],row[35],row[36],row[37],row[38],
+        row[39],row[40],row[41],row[42],row[43],row[44]))
+    connection.commit()
+    return 'success'
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=5100,debug=True,threaded=True)
-
